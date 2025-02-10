@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Supabase User Data</title>
+    </head>
+    <body>
+      <h2>Supabase User Data</h2>
+      <button onclick="fetchUsers()">Fetch Users</button>
+      <div id="userTable"></div>
+
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+      <script>
+        const SUPABASE_URL = "https://xxymbobojijnczeyaykj.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4eW1ib2JvamlqbmN6ZXlheWtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkxODUzODksImV4cCI6MjA1NDc2MTM4OX0.E3-YNt8EO9Vyn63bWOk6lNtX9s4Z23Ay2ZQP3zjL_FQ";
+
+        // Create the client instance using a unique variable name.
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function fetchUsers() {
+          try {
+            const { data, error } = await supabaseClient
+              .from('users')
+              .select('*');
+
+            if (error) {
+              console.error("Error fetching users:", error);
+              document.getElementById('userTable').innerHTML =
+                "<p style='color:red;'>Error fetching data</p>";
+              return;
+            }
+<!--            console.log(data)-->
+
+<!--            console.log(error)-->
+<!--            // Build HTML table from fetched data-->
+<!--            let tableHtml = "<table border='1'><tr><th>User ID</th><th>Password Hash</th><th>Role</th></tr>";-->
+            data.forEach(user => {
+              tableHtml += `<tr>
+                              <td>${user.userid}</td>
+                              <td>${user.password_hash}</td>
+                              <td>${user.role}</td>
+                            </tr>`;
+            });
+<!--            tableHtml += "</table>";-->
+<!--            document.getElementById('userTable').innerHTML = tableHtml;-->
+          } catch (err) {
+            console.error("Fetch error:", err);
+            document.getElementById('userTable').innerHTML =
+              "<p style='color:red;'>An error occurred</p>";
+          }
+        }
+      </script>
+    </body>
+    </html>
